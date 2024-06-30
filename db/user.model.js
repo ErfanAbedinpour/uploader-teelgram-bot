@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const jdate = require('jalali-date');
 
 
 const schema = new mongoose.Schema({

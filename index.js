@@ -3,7 +3,6 @@ const functions = require('./functions.js')
 const actions = require('./actions.js')
 require('dotenv').config()
 
-
 //telegraf instance 
 const bot = new Telegraf(process.env['BOT_TOKEN']);
 

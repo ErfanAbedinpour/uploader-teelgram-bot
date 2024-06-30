@@ -1,19 +1,18 @@
 //modules
+const path = require('path')
 const fs = require('fs');
 const axios = require('axios');
 const mongoose = require('mongoose')
-const fileModel = require('./db/file.model')
-const userModel = require('./db/user.model')
-const utils = require('util')
+const fileModel = require('./db/file.model');
+const userModel = require('./db/user.model');
+const crypto = require('crypto')
+const utils = require('util');
 //promisify a utils functions
 const isExsist = utils.promisify(fs.exists)
 const mkdir = utils.promisify(fs.mkdir)
 // downlaod file from telegram
 exports.download_file = async function(url, path) {
   try {
-    if (!(await isExsist(path))) {
-      await mkdir(path)
-    }
     const writer = fs.createWriteStream(path)
     const response = await axios({
       method: 'get',
@@ -40,7 +39,11 @@ exports.normilize_input_file = async function(ctx, type) {
   const fileFrmt = (await ctx.telegram.getFile(file_id)).file_path.split('.').at(-1)
   const filename = crypto.randomBytes(7).toString('hex');
   const downloadUrl = (await ctx.telegram.getFileLink(file_id)).href
-  const filePath = path.join(__dirname, 'photos', `${filename.trimEnd()}.${fileFrmt.trimEnd()}`)
+  const savedPath = path.join(__dirname, 'savedFiles')
+  if (!(await isExsist(savedPath))) {
+    await mkdir(savedPath)
+  }
+  const filePath = path.join(savedPath, `${filename.trimEnd()}.${fileFrmt.trimEnd()}`)
   return {
     url: downloadUrl,
     path: filePath,

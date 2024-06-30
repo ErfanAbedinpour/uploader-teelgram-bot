@@ -1,3 +1,5 @@
+const userModel = require('./db/user.model')
+const fileModel = require('./db/file.model')
 const { messages } = require('./message/messages');
 //get file from user actions1(params) {
 exports.get_code_send_file = async function(ctx) {
@@ -7,7 +9,7 @@ exports.get_code_send_file = async function(ctx) {
     return await ctx.reply('فایل مورد نظر پیدا نشد')
   }
   console.log('file path is', file.filePath)
-  await ctx.replyWithPhoto({ source: `./photos/${file.filename}` })
+  await ctx.replyWithPhoto({ source: `./savedFiles/${file.filename}` })
 }
 
 //start actions functions
